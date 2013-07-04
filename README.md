@@ -14,21 +14,6 @@ php-backend-api
 请确保 app/data/ 目录可写入。
 
 
-## 接口快速参考
-
-```
-- user            用户类接口
-  - login         登录
-  - logout        注销
-  - update        更改用户名/密码
-
-- server          服务器类接口
-  - add           添加
-  - update        更新
-  - delete        删除
-  - list          查询服务器列表
-```
-
 ## 接口规范
 
 #### 接口地址
@@ -38,11 +23,11 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 #### 公用参数
 
 ```
-- c：模块名，如：user
-- a：操作名，如：login
-- i：json缩进开关，当设置为true时，将会对返回值进程格式化输出（方便调试查看）
-- f：数据格式，可选值：json|jsonp，默认为json
-- cb：jsonp回调函数名，仅当 f 为 jsonp 时有效
+- c     模块名，如：user
+- a     操作名，如：login
+- i     json缩进开关，当设置为true时，将会对返回值进程格式化输出（方便调试查看）
+- f     数据格式，可选值：json|jsonp，默认为json
+- cb    jsonp回调函数名，仅当 f 为 jsonp 时有效
 ```
 
 示例：
@@ -68,12 +53,27 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 ```
 {
   "code":-1,
-  "message":"失败提示信息",
-  "data":{
-    // 返回数据
-  }
+  "message":"失败提示信息"
 }
 ```
+
+
+## 接口快速参考
+
+```
+- user            用户类接口
+  - login         登录
+  - logout        注销
+  - update        更改用户名/密码
+
+- server          服务器类接口
+  - add           添加
+  - update        更新
+  - delete        删除
+  - list          查询服务器列表
+  - get           获取服务器信息
+```
+
 
 ## 接口文档
 
@@ -295,6 +295,40 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
         "username":null
       }
     ]
+  }
+}
+```
+
+
+##### get - 获取服务器信息
+
+请求参数：
+
+    serverid    (必须)服务器ID
+
+返回数据：
+
+    server      服务器信息
+
+示例请求：
+
+    {API_GATEWAY}/?c=server&a=get&i=true&serverid=1
+
+
+示例返回：
+
+```
+{
+  "code":0,
+  "message":"get server info successfully",
+  "data":{
+    "server":{
+      "serverid":1,
+      "servername":"localhost",
+      "serverip":"127.0.0.1",
+      "serverport":13123,
+      "username":null
+    }
   }
 }
 ```

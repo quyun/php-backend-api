@@ -130,6 +130,26 @@ Class ServerController extends Controller
     }
 
     /**
+     * Get server info
+     */
+    public function getAction()
+    {
+        $serverid = $this->requireNotEmptyParam('serverid');
+        if (!$this->serveridExists($serverid)) {
+            $this->apiErr('server does not exist');
+        }
+
+        $stmt = $this->db->prepare('SELECT serverid, servername, serverip, serverport, username FROM servers WHERE serverid=:serverid');
+        $stmt->bindValue(':serverid', $serverid, SQLITE3_INTEGER);
+        $result = $stmt->execute();
+        $server = $result->fetchArray(SQLITE3_ASSOC);
+
+        $this->apiOk(array(
+            'server' => $server,
+        ), 'get server info successfully');
+    }
+
+    /**
      * Check if server with specified ip:port exists
      * @param string $serverip
      * @param string $serverport
