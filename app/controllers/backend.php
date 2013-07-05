@@ -39,6 +39,12 @@ Class BackendController extends Controller
             'list server log dir successfully'              => '获取服务器日志目录列表成功',
             'list server log file successfully'             => '获取服务器日志文件列表成功',
             'get server log file content successfully'      => '读取服务器日志文件内容成功',
+            'schedule add successfully'                     => '进程调度配置添加成功',
+            'schedule update successfully'                  => '进程调度配置更新成功',
+            'schedule delete successfully'                  => '进程调度配置删除成功',
+            'get schedule info successfully'                => '进程调度配置信息成功',
+            'get all schedule info successfully'            => '获取所有进程调度信息成功',
+            'get schedule log successfully'                 => '获取调度配置执行历史成功',
         ),
     );
 
@@ -55,6 +61,7 @@ Class BackendController extends Controller
             'privileges'    => '权限',
             'dirname'       => '日志目录名',
             'filename'      => '日志文件名',
+            'scheduleid'    => '进程调度ID',
         ),
     );
 
@@ -502,6 +509,121 @@ Class BackendController extends Controller
         $this->apiOk(array(
             'log' => $result['data'],
         ), 'get server log file content successfully');
+    }
+
+    /**
+     * Add new schedule
+     */
+    public function scheduleAddAction()
+    {
+        $jobname = $this->requireNotEmptyParam('jobname');
+        $enable = $this->requireNotEmptyParam('enable');
+        $condition = $this->requireNotEmptyParam('condition');
+
+        $setting = array(
+            'enable' => $enable,
+            'condition' => $condition,
+        );
+
+        $result = $this->backend->scheduler_add($jobname, $setting);
+        $this->processUnnormalBackendResult($result);
+
+        $this->apiOk(array(
+            'scheduleid' => $result['data'],
+        ), 'schedule add successfully');
+    }
+
+    /**
+     * Update schedule
+     */
+    public function scheduleUpdateAction()
+    {
+        $jobname = $this->requireNotEmptyParam('jobname');
+        $scheduleid = $this->requireNotEmptyParam('scheduleid');
+        $enable = $this->req->get('enable');
+        $condition = $this->req->get('condition');
+
+        $setting = array();
+        if (!is_null($enable)) {
+            $this->requireNotEmptyParam('enable');
+            $setting['enable'] = $enable;
+        }
+        if (!is_null($condition)) {
+            $this->requireNotEmptyParam('condition');
+            $setting['condition'] = $condition;
+        }
+
+        if (!$setting) $this->apiErr('nothing to update');
+
+        $result = $this->backend->scheduler_update($jobname, $scheduleid, $setting);
+        $this->processUnnormalBackendResult($result);
+
+        $this->apiOk(null, 'schedule update successfully');
+    }
+
+    /**
+     * Delete schedule
+     */
+    public function scheduleDeleteAction()
+    {
+        $jobname = $this->requireNotEmptyParam('jobname');
+        $scheduleid = $this->requireNotEmptyParam('scheduleid');
+
+        $result = $this->backend->scheduler_delete($jobname, $scheduleid);
+        $this->processUnnormalBackendResult($result);
+
+        $this->apiOk(null, 'schedule delete successfully');
+    }
+
+    /**
+     * Get schedule info
+     */
+    public function scheduleGetAction()
+    {
+        $jobname = $this->requireNotEmptyParam('jobname');
+        $scheduleid = $this->requireNotEmptyParam('scheduleid');
+
+        $result = $this->backend->scheduler_get($jobname, $scheduleid);
+        $this->processUnnormalBackendResult($result);
+
+        $this->apiOk(array(
+            'schedule' => $result['data'],
+        ), 'get schedule info successfully');
+    }
+
+    /**
+     * Get all schedule info
+     */
+    public function scheduleGetAllAction()
+    {
+        $result = $this->backend->scheduler_getall();
+        $this->processUnnormalBackendResult($result);
+
+        $this->apiOk(array(
+            'schedules' => $result['data'],
+        ), 'get all schedule info successfully');
+    }
+
+    /**
+     * Get schedule log
+     */
+    public function scheduleGetLogAction()
+    {
+        $jobname = $this->requireNotEmptyParam('jobname');
+        $scheduleid = $this->requireNotEmptyParam('scheduleid');
+
+        $result = $this->backend->scheduler_getlog($jobname, $scheduleid);
+        $this->processUnnormalBackendResult($result);
+
+        $log = $result['data'];
+        foreach ($log as $i=>$time)
+        {
+            $log[$i] = date('Y-m-d H:i:s', $time);
+        }
+
+        $this->apiOk(array(
+            'log' => $log,
+        ), 'get schedule log successfully');
     }
 
 }

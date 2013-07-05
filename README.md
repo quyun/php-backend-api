@@ -103,6 +103,12 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
   - logServerListDir    获取服务器日志目录列表
   - logServerListFile   获取服务器日志目录文件
   - logServerGet        读取服务器日志文件内容
+  - scheduleAdd         添加调度配置
+  - scheduleUpdate      更新调度配置
+  - scheduleDelete      删除调度配置
+  - scheduleGet         获取调度配置
+  - scheduleGetAll      获取所有调度配置信息
+  - scheduleGetLog      获取调度执行历史
 ```
 
 
@@ -886,7 +892,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
     serverid    (必须)服务器ID
     username    (必须)用户名
     password    (必须)密码
-    privileges  (必须)权限，用逗号分隔，*表示所有权限
+    privileges  (必须)权限，用逗号分隔，*表示所有权限，权限列表请参考附录
 
 返回数据：
 
@@ -915,7 +921,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
     serverid    (必须)服务器ID
     username    (必须)用户名
     password    (可选)密码
-    privileges  (可选)权限，用逗号分隔，*表示所有权限
+    privileges  (可选)权限，用逗号分隔，*表示所有权限，权限列表请参考附录
 
 返回数据：
 
@@ -1241,7 +1247,211 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 ```
 
 
-## 参考
+##### scheduleAdd - 添加调度配置
+
+请求参数：
+
+    serverid    (必须)服务器ID
+    jobname     (必须)服务器ID
+    enable      (必须)是否启用该配置，可选值：0|1
+    condition   (必须)调度条件，条件字段请参考附录
+
+返回数据：
+
+    scheduleid  进程调度配置ID
+
+示例请求：
+
+    {API_GATEWAY}/?c=backend&a=scheduleAdd&i=true&serverid=1&jobname=test&enable=1&condition[U]=300
+
+
+示例返回：
+
+```
+{
+  "code":0,
+  "message":"schedule add successfully",
+  "data":{
+    "scheduleid":"4fe1e4a9-a6e9-4eed-8809-397fc1bfd042"
+  }
+}
+```
+
+
+##### scheduleUpdate - 更新调度配置
+
+请求参数：
+
+    serverid    (必须)服务器ID
+    jobname     (必须)服务器ID
+    scheduleid  (必须)调度配置ID
+    enable      (可选)是否启用该配置，可选值：0|1
+    condition   (可选)调度条件，条件字段请参考附录
+
+返回数据：
+
+    无
+
+示例请求：
+
+    {API_GATEWAY}/?c=backend&a=scheduleUpdate&i=true&serverid=1&jobname=test&scheduleid=4fe1e4a9-a6e9-4eed-8809-397fc1bfd042&enable=0
+
+
+示例返回：
+
+```
+{
+  "code":0,
+  "message":"schedule update successfully",
+  "data":null
+}
+```
+
+
+##### scheduleDelete - 删除调度配置
+
+请求参数：
+
+    serverid    (必须)服务器ID
+    jobname     (必须)服务器ID
+    scheduleid  (必须)调度配置ID
+
+返回数据：
+
+    无
+
+示例请求：
+
+    {API_GATEWAY}/?c=backend&a=scheduleDelete&i=true&serverid=1&jobname=test&scheduleid=4fe1e4a9-a6e9-4eed-8809-397fc1bfd042
+
+
+示例返回：
+
+```
+{
+  "code":0,
+  "message":"schedule delete successfully",
+  "data":null
+}
+```
+
+
+##### scheduleGet - 获取调度配置
+
+请求参数：
+
+    serverid    (必须)服务器ID
+    jobname     (必须)服务器ID
+    scheduleid  (必须)调度配置ID
+
+返回数据：
+
+    schedule    调度配置信息
+
+示例请求：
+
+    {API_GATEWAY}/?c=backend&a=scheduleGet&i=true&serverid=1&jobname=test&scheduleid=4fe1e4a9-a6e9-4eed-8809-397fc1bfd042
+
+
+示例返回：
+
+```
+{
+  "code":0,
+  "message":"get schedule info successfully",
+  "data":{
+    "schedule":{
+      "4fe1e4a9-a6e9-4eed-8809-397fc1bfd042":{
+        "enable":true,
+        "condition":{
+          "U":300
+        }
+      }
+    }
+  }
+}
+```
+
+
+##### scheduleGetAll - 获取所有调度配置信息
+
+请求参数：
+
+    serverid    (必须)服务器ID
+
+返回数据：
+
+    schedules   所有调度配置信息
+
+示例请求：
+
+    {API_GATEWAY}/?c=backend&a=scheduleGetAll&i=true&serverid=1
+
+
+示例返回：
+
+```
+{
+  "code":0,
+  "message":"get all schedule info successfully",
+  "data":{
+    "schedules":{
+      "test":{
+        "4fe1e4a9-a6e9-4eed-8809-397fc1bfd042":{
+          "enable":true,
+          "condition":{
+            "U":300
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+
+##### scheduleGetLog - 获取调度执行历史
+
+请求参数：
+
+    serverid    (必须)服务器ID
+    jobname     (必须)服务器ID
+    scheduleid  (必须)调度配置ID
+
+返回数据：
+
+    log         调度执行历史
+
+示例请求：
+
+    {API_GATEWAY}/?c=backend&a=scheduleGetLog&i=true&serverid=1&jobname=test&scheduleid=4fe1e4a9-a6e9-4eed-8809-397fc1bfd042
+
+
+示例返回：
+
+```
+{
+  "code":0,
+  "message":"get schedule log successfully",
+  "data":{
+    "log":[
+      "2013-07-05 13:58:16",
+      "2013-07-05 13:53:16",
+      "2013-07-05 13:48:16",
+      "2013-07-05 13:43:16",
+      "2013-07-05 13:38:16",
+      "2013-07-05 13:33:16",
+      "2013-07-05 13:28:16",
+      "2013-07-05 13:23:16",
+      "2013-07-05 13:18:16",
+      "2013-07-05 13:13:16"
+    ]
+  }
+}
+```
+
+
+## 附录
 
 ##### 权限列表
 
@@ -1287,4 +1497,53 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
    - SCHEDULER.GET               查询进程调度配置信息
    - SCHEDULER.GETALL            查询所有的进程调度配置信息
    - SCHEDULER.GETLOG            查询进程调度执行历史
+```
+
+##### 进程调度条件
+
+以下是进程调度条件中的 condition 参数可以使用的字段组合规则：
+
+```
+* Y + m + d + H + i + U
+  年 + 月 + 日 + 时 + 分 + 每间隔
+  如：
+  - 2013-10-01 当天，每5分钟执行1次
+    condition[Y]=2013&condition[m]=10&condition[d]=1&condition[U]=300
+
+* Y + W + N + H + i + U
+  年 + 周 + 周几 + 时 + 分 + 每间隔
+  如：
+  - 每周5晚上8点执行1次
+    condition[N]=5&condition[H]=20
+
+* Y + z + H + i + U
+  年 + 日 + 时 + 分 + 每间隔
+  如：
+  - 每年第180天执行1次
+    condition[z]=179
+```
+
+各个时间条件字段的说明及取值范围：
+
+```
+日：
+d - 月份中的第几天，取值：01-31，或 @t（月份中的最后一天）
+N - 星期中的第几天，取值：1-7
+z - 年份中的第几天，取值：0-365
+
+星期：
+W - 年份中的第几周，取值：1-53
+
+月：
+m - 月份，取值：01-12
+
+年：
+Y - 年份，取值：2013-2099
+
+时间：
+H - 小时，取值：00-23
+i - 分钟，取值：00-59
+
+每间隔：
+U - 时间戳，取值：60的倍数，并小于86400*365，表示时间间隔（从服务器启动开始，每间隔多少秒执行一次）
 ```
