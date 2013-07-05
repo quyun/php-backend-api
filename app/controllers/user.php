@@ -2,6 +2,33 @@
 
 Class UserController extends Controller
 {
+
+    /**
+     * @var array
+     */
+    protected $_messages = array(
+        'zh_CN' => array(
+            // -err-
+            'already login, please logout first'    => '已经登录，请先注销',
+            'username or password does not match'   => '用户名或密码不正确',
+            'nothing to update'                     => '不需要更新',
+            // -ok-
+            'login successfully'                    => '登录成功',
+            'logout successfully'                   => '注销成功',
+            'update successfully'                   => '更新成功',
+        ),
+    );
+
+    /**
+     * @var array
+     */
+    protected $_fields = array(
+        'zh_CN' => array(
+            'username'      => '用户名',
+            'password'      => '密码',
+        ),
+    );
+
     /**
      * Login
      */

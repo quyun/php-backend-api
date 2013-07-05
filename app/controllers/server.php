@@ -2,6 +2,37 @@
 
 Class ServerController extends Controller
 {
+
+    /**
+     * @var array
+     */
+    protected $_messages = array(
+        'zh_CN' => array(
+            // -err-
+            'server already exists'                 => '服务器已存在',
+            'server does not exist'                 => '服务器不存在',
+            'nothing to update'                     => '不需要更新',
+            // -ok-
+            'server add successfully'               => '添加服务器成功',
+            'server update successfully'            => '更新服务器成功',
+            'server delete successfully'            => '删除服务器成功',
+            'server list fetch successfully'        => '获取服务器列表成功',
+            'get server info successfully'          => '获取服务器信息成功',
+        ),
+    );
+
+    /**
+     * @var array
+     */
+    protected $_fields = array(
+        'zh_CN' => array(
+            'servername'    => '服务器名称',
+            'serverip'      => '服务器IP地址',
+            'serverport'    => '服务器端口',
+            'serverid'      => '服务器ID',
+        ),
+    );
+
     /**
      * Constructor
      * @param  object $app

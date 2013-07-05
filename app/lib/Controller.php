@@ -8,6 +8,46 @@ Class Controller
     protected $_db;
 
     /**
+     * @var array
+     */
+    protected $_backends;
+
+    /**
+     * @var array
+     */
+    private $_global_messages = array(
+        'zh_CN' => array(
+            // -err-
+            'can not open database'                 => '无法打开数据库',
+            'server does not exist'                 => '服务器不存在',
+            'unable to connect to backend server'   => '无法连接到后台进程服务器',
+            'not login yet'                         => '尚未登录',
+        ),
+    );
+
+    /**
+     * @var array
+     */
+    private $_partials = array(
+        'zh_CN' => array(
+            'backend server return'         => '后台进程服务器返回',
+            'is required'                   => '是必须的',
+            'is not allow to be empty'      => '不允许为空',
+        ),
+    );
+
+    /**
+     * @var array
+     */
+    private $_global_fields = array(
+        'zh_CN' => array(
+            'FAILED'        => '失败',
+            'DENIED'        => '禁止',
+            'UNKNOWN'       => '未知指令',
+        ),
+    );
+
+    /**
      * Constructor
      * @param  object $app
      */
@@ -16,12 +56,15 @@ Class Controller
         $this->app = $app;
         $this->req = $app->request();
 
+        $this->_backends = array();
+
         session_start();
     }
 
     public function __get($name)
     {
         if ($name == 'db') return $this->db();
+        if ($name == 'backend') return $this->backend();
         return $this->$name;
     }
 
@@ -35,7 +78,7 @@ Class Controller
             $dbpath = $this->app->config('dbpath');
             $db = new SQLite3($dbpath, SQLITE3_OPEN_READWRITE | SQLITE3_OPEN_CREATE);
         } catch (Exception $e) {
-            $this->apiErr(null, 'can not open database');
+            $this->apiErr('can not open database');
         }
         $this->_db = $db;
         return $this->_db;
@@ -69,6 +112,47 @@ Class Controller
     }
 
     /**
+     * Return backend object
+     */
+    private function backend()
+    {
+        $serverid = $this->requireNotEmptyParam('serverid');
+        if (isset($this->_backends[$serverid])) return $this->_backends[$serverid];
+
+        // get server ip/port
+        $stmt = $this->db->prepare('SELECT serverip, serverport, username, password FROM servers WHERE serverid=:serverid');
+        $stmt->bindValue(':serverid', $serverid, SQLITE3_INTEGER);
+        $result = $stmt->execute();
+        $server = $result->fetchArray(SQLITE3_ASSOC);
+        if (!$server) {
+            $this->apiErr('server does not exist');
+        }
+
+        $be = new Backend();
+        $be->init($server['serverip'], $server['serverport']);
+        if ($server['username'] && $server['password']) {
+            $be->init_auth($server['username'], $server['password']);
+        }
+        $this->_backends[$serverid] = $be;
+
+        return $this->_backends[$serverid];
+    }
+
+    /**
+     * Process with unnormal backend result
+     * @param array $result
+     */
+    protected function processUnnormalBackendResult($result)
+    {
+        if (!$result) {
+            $this->apiErr('unable to connect to backend server');
+        }
+        if ($result['code'] != 'OK') {
+            $this->apiErr("backend server return \"{$result['code']}\"");
+        }
+    }
+
+    /**
      * Check if user is login
      * @param  string $paramName
      */
@@ -80,19 +164,6 @@ Class Controller
     }
 
     /**
-     * Get a required param's value from request
-     * @param  string $paramName
-     */
-    protected function requireParam($paramName)
-    {
-        $value = $this->req->get($paramName);
-        if (is_null($value)) {
-            $this->apiErr("{$paramName} is required");
-        }
-        return $value;
-    }
-
-    /**
      * Get a required not empty param's value from request
      * @param  string $paramName
      */
@@ -100,10 +171,10 @@ Class Controller
     {
         $value = $this->req->get($paramName);
         if (is_null($value)) {
-            $this->apiErr("{$paramName} is required");
+            $this->apiErr("\"{$paramName}\" is required");
         }
-        if (empty($value)) {
-            $this->apiErr("{$paramName} is not allow to be empty");
+        if ($value == '') {
+            $this->apiErr("\"{$paramName}\" is not allow to be empty");
         }
         return $value;
     }
@@ -114,14 +185,16 @@ Class Controller
      */
     protected function apiOk($data, $message='')
     {
+        $message = $this->translateMessage($message);
         $dataFormat = $this->req->get('f');
         $indent = $this->req->get('i');
+        $res = $this->app->response();
         if ($dataFormat == 'jsonp') {
             $callbackName = $this->req->get('cb');
+            $res['Content-Type'] = 'application/x-javascript; charset=utf-8';
             $this->jsonpOk($data, $message, $callbackName, $indent);
         } else {
-            $res = $this->app->response();
-            $res['Content-Type'] = 'application/json';
+            $res['Content-Type'] = 'application/json; charset=utf-8';
             $this->jsonOk($data, $message, $indent);
         }
         $this->app->stop();
@@ -132,17 +205,72 @@ Class Controller
      */
     public function apiErr($message='')
     {
+        $message = $this->translateMessage($message);
         $dataFormat = $this->req->get('f');
         $indent = $this->req->get('i');
+        $res = $this->app->response();
         if ($dataFormat == 'jsonp') {
             $callbackName = $this->req->get('cb');
+            $res['Content-Type'] = 'application/x-javascript; charset=utf-8';
             $this->jsonpErr($message, $callbackName, $indent);
         } else {
-            $res = $this->app->response();
-            $res['Content-Type'] = 'application/json';
+            $res['Content-Type'] = 'application/json; charset=utf-8';
             $this->jsonErr($message, $indent);
         }
         $this->app->stop();
+    }
+
+    /**
+     * Translate message
+     * @param  string $message
+     */
+    private function translateMessage($message)
+    {
+        if (!$message) return $message;
+        $language = $this->req->get('l');
+        $_messages = array_merge_recursive($this->_global_messages, $this->_messages);
+        if (!in_array($language, array_keys($_messages))) return $message;
+
+        if (isset($_messages[$language][$message])) {
+            return $_messages[$language][$message];
+        }
+
+        // detect "field" in message
+        if (preg_match('/([^"]*)"([^"]+)"([^"]*)/', $message, $matches)) {
+            $pre = $this->translatePartial($matches[1], $language);
+            $field = $this->translateField($matches[2], $language);
+            $post = $this->translatePartial($matches[3], $language);
+            return implode('', array($pre, '"'.$field.'"', $post));
+        }
+    }
+
+    /**
+     * Translate message partial
+     * @param  string $partial
+     */
+    private function translatePartial($partial, $language)
+    {
+        if (!$partial) return $partial;
+        $partial = trim($partial);
+
+        if (isset($this->_partials[$language][$partial])) {
+            return $this->_partials[$language][$partial];
+        }
+        return $partial;
+    }
+
+    /**
+     * Translate message field
+     * @param  string $field
+     */
+    private function translateField($field, $language)
+    {
+        if (!$field) return $field;
+        $_fields = array_merge_recursive($this->_global_fields, $this->_fields);
+        if (isset($_fields[$language][$field])) {
+            return $_fields[$language][$field];
+        }
+        return $field;
     }
     
     /**

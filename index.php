@@ -3,6 +3,7 @@ date_default_timezone_set('Asia/Shanghai');
 
 require 'app/lib/Slim/Slim.php';
 require 'app/lib/Controller.php';
+require 'app/lib/Backend.class.php';
 
 \Slim\Slim::registerAutoloader();
 
