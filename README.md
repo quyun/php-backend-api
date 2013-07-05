@@ -1069,7 +1069,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 ```
 
 
-##### logListFile - 获取日志目录文件
+##### logListFile - 获取日志文件列表
 
 请求参数：
 
@@ -1176,7 +1176,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 ```
 
 
-##### logServerListFile - 获取服务器日志目录文件
+##### logServerListFile - 获取服务器日志文件列表
 
 请求参数：
 
