@@ -62,34 +62,47 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 ## 接口快速参考
 
 ```
-- user            用户类接口
-  - login         登录
-  - logout        注销
-  - update        更改用户名/密码
+- user                  用户类接口
+  - login               登录
+  - logout              注销
+  - update              更改用户名/密码
 
-- server          服务器类接口
-  - add           添加
-  - update        更新
-  - delete        删除
-  - list          查询服务器列表
-  - get           获取服务器信息
+- server                服务器类接口
+  - add                 添加
+  - update              更新
+  - delete              删除
+  - list                查询服务器列表
+  - get                 获取服务器信息
 
-- backend         后台进程服务器控制类接口
-  - add           添加进程
-  - update        更新进程
-  - delete        删除进程
-  - get           获取进程信息
-  - getAll        获取所有进程信息
-  - start         启动进程
-  - stop          停止进程
-  - restart       重启进程
-  - status        获取进程状态
-  - statusAll     获取所有进程状态
-  - read          读取进程输出缓冲
-  - mem           查询进程内存使用量
-  - memAll        查询所有进程的内存使用量
-  - serverMem     查询进程服务器的内存使用量
-  - serverRead    读取进程服务器的输出缓冲
+- backend               后台进程服务器控制类接口
+  - add                 添加进程
+  - update              更新进程
+  - delete              删除进程
+  - get                 获取进程信息
+  - getAll              获取所有进程信息
+  - start               启动进程
+  - stop                停止进程
+  - restart             重启进程
+  - status              获取进程状态
+  - statusAll           获取所有进程状态
+  - read                读取进程输出缓冲
+  - mem                 查询进程内存使用量
+  - memAll              查询所有进程的内存使用量
+  - serverMem           查询进程服务器的内存使用量
+  - serverRead          读取进程服务器的输出缓冲
+  - authGetEnable       读取授权管理是否启用
+  - authSetEnable       设置授权管理是否启用
+  - authAdd             添加用户
+  - authUpdate          更新用户
+  - authDelete          删除用户
+  - authGet             获取用户信息
+  - authGetAll          获取所有用户信息
+  - logListDir          获取日志目录列表
+  - logListFile         获取日志目录文件
+  - logGet              读取日志文件内容
+  - logServerListDir    获取服务器日志目录列表
+  - logServerListFile   获取服务器日志目录文件
+  - logServerGet        读取服务器日志文件内容
 ```
 
 
@@ -1013,4 +1026,265 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
     }
   }
 }
+```
+
+
+##### logListDir - 获取日志目录列表
+
+请求参数：
+
+    serverid    (必须)服务器ID
+    jobname     (必须)进程名称
+
+返回数据：
+
+    logdirs     日志目录列表
+
+示例请求：
+
+    {API_GATEWAY}/?c=backend&a=logListDir&i=true&serverid=1&jobname=test
+
+
+示例返回：
+
+```
+{
+  "code":0,
+  "message":"list log dir successfully",
+  "data":{
+    "logdirs":[
+      "20130705",
+      "20130704",
+      "20130702",
+      "20130701"
+    ]
+  }
+}
+```
+
+
+##### logListFile - 获取日志目录文件
+
+请求参数：
+
+    serverid    (必须)服务器ID
+    jobname     (必须)进程名称
+    dirname     (必须)日志目录名称
+
+返回数据：
+
+    logfiles    日志文件列表
+
+示例请求：
+
+    {API_GATEWAY}/?c=backend&a=logListFile&i=true&serverid=1&jobname=test&dirname=20130705
+
+
+示例返回：
+
+```
+{
+  "code":0,
+  "message":"list log file successfully",
+  "data":{
+    "logfiles":[
+      "2013070510.log",
+      "2013070509.log",
+      "2013070508.log",
+      "2013070507.log",
+      "2013070506.log",
+      "2013070505.log",
+      "2013070504.log",
+      "2013070503.log",
+      "2013070502.log",
+      "2013070501.log",
+      "2013070500.log"
+    ]
+  }
+}
+```
+
+
+##### logGet - 读取日志文件内容
+
+请求参数：
+
+    serverid    (必须)服务器ID
+    jobname     (必须)进程名称
+    dirname     (必须)日志目录名称
+    filename    (必须)日志文件名称
+
+返回数据：
+
+    log         日志文件内容
+
+示例请求：
+
+    {API_GATEWAY}/?c=backend&a=logGet&i=true&serverid=1&jobname=test&dirname=20130705&filename=2013070510.log
+
+
+示例返回：
+
+```
+{
+  "code":0,
+  "message":"get log file content successfully",
+  "data":{
+    "log":"31549\n[13-07-05 10:00:00] 31550\n[13-07-05 10:00:01] 31551\n[13-07-05 10:00:02]"
+  }
+}
+```
+
+
+##### logServerListDir - 获取服务器日志目录列表
+
+请求参数：
+
+    serverid    (必须)服务器ID
+
+返回数据：
+
+    logdirs     日志目录列表
+
+示例请求：
+
+    {API_GATEWAY}/?c=backend&a=logServerListDir&i=true&serverid=1
+
+
+示例返回：
+
+```
+{
+  "code":0,
+  "message":"list server log dir successfully",
+  "data":{
+    "logdirs":[
+      "error",
+      "20130705",
+      "20130704",
+      "20130702",
+      "20130701"
+    ]
+  }
+}
+```
+
+
+##### logServerListFile - 获取服务器日志目录文件
+
+请求参数：
+
+    serverid    (必须)服务器ID
+    dirname     (必须)日志目录名称
+
+返回数据：
+
+    logfiles    日志文件列表
+
+示例请求：
+
+    {API_GATEWAY}/?c=backend&a=logServerListFile&i=true&serverid=1&jobname=test&dirname=20130705
+
+
+示例返回：
+
+```
+{
+  "code":0,
+  "message":"list server log file successfully",
+  "data":{
+    "logfiles":[
+      "2013070510.log",
+      "2013070509.log",
+      "2013070508.log",
+      "2013070507.log",
+      "2013070506.log",
+      "2013070505.log",
+      "2013070504.log",
+      "2013070503.log",
+      "2013070502.log",
+      "2013070501.log",
+      "2013070500.log"
+    ]
+  }
+}
+```
+
+
+##### logServerGet - 读取服务器日志文件内容
+
+请求参数：
+
+    serverid    (必须)服务器ID
+    dirname     (必须)日志目录名称
+    filename    (必须)日志文件名称
+
+返回数据：
+
+    log         日志文件内容
+
+示例请求：
+
+    {API_GATEWAY}/?c=backend&a=logServerGet&i=true&serverid=1&jobname=test&dirname=20130705&filename=2013070510.log
+
+
+示例返回：
+
+```
+{
+  "code":0,
+  "message":"get server log file content successfully",
+  "data":{
+    "log":"\n[13-07-05 10:01:07] [scheduler] starting \"test\"...\n[13-07-05 10:01:07] FAILED. (process \"test\"(3248) has already exist.)\n[13-07-05 10:06:07] [scheduler] starting \"test\"...\n[13-07-05 10:06:07] FAILED. (process \"test\"(3248) has already exist.)\n[13-07-05 10:11:07] "
+  }
+}
+```
+
+
+## 参考
+
+##### 权限列表
+
+```
+ - 核心类
+   - ADD                         添加进程
+   - DELETE                      删除进程
+   - UPDATE                      更新进程
+   - GET                         查看进程
+   - GETALL                      查看所有进程
+   - START                       开启进程
+   - STOP                        结束进程
+   - RESTART                     重启进程
+   - STATUS                      查询后台进程状态
+   - STATUSALL                   查询所有后台进程状态
+   - READ                        读取进程输出缓冲
+   - MEM                         查询进程的内存使用量
+   - MEMALL                      查询所有进程的内存使用量
+   - SERVERMEM                   查询服务器的内存使用量
+   - SERVERREAD                  读取服务器的输出
+
+ - 授权管理类
+   - AUTH.GETENABLE              获取授权启用状态
+   - AUTH.SETENABLE              设置授权启用状态
+   - AUTH.ADD                    添加用户
+   - AUTH.DELETE                 删除用户
+   - AUTH.UPDATE                 更新用户信息
+   - AUTH.GET                    查询用户信息
+   - AUTH.GETALL                 查询所有用户信息
+
+ - 日志浏览类
+   - LOGEXPLORER.LISTDIR         查询日志目录列表
+   - LOGEXPLORER.LISTFILE        查询日志文件列表
+   - LOGEXPLORER.GET             读取日志文件内容
+   - LOGEXPLORER.SERVERLISTDIR   查询服务器日志目录列表
+   - LOGEXPLORER.SERVERLISTFILE  查询服务器日志文件列表
+   - LOGEXPLORER.SERVERGET       读取服务器日志文件内容
+
+ - 进程调度类
+   - SCHEDULER.ADD               添加新的进程调度配置
+   - SCHEDULER.DELETE            删除进程调度配置
+   - SCHEDULER.UPDATE            更新进程调度配置
+   - SCHEDULER.GET               查询进程调度配置信息
+   - SCHEDULER.GETALL            查询所有的进程调度配置信息
+   - SCHEDULER.GETLOG            查询进程调度执行历史
 ```

@@ -33,6 +33,12 @@ Class BackendController extends Controller
             'user delete successfully'                      => '用户删除成功',
             'get user info successfully'                    => '获取用户信息成功',
             'get all user info successfully'                => '获取所有用户信息成功',
+            'list log dir successfully'                     => '获取日志目录列表成功',
+            'list log file successfully'                    => '获取日志文件列表成功',
+            'get log file content successfully'             => '读取日志文件内容成功',
+            'list server log dir successfully'              => '获取服务器日志目录列表成功',
+            'list server log file successfully'             => '获取服务器日志文件列表成功',
+            'get server log file content successfully'      => '读取服务器日志文件内容成功',
         ),
     );
 
@@ -47,6 +53,8 @@ Class BackendController extends Controller
             'username'      => '用户名',
             'password'      => '密码',
             'privileges'    => '权限',
+            'dirname'       => '日志目录名',
+            'filename'      => '日志文件名',
         ),
     );
 
@@ -402,6 +410,98 @@ Class BackendController extends Controller
         $this->apiOk(array(
             'users' => $result['data'],
         ), 'get all user info successfully');
+    }
+
+    /**
+     * List log dir
+     */
+    public function logListDirAction()
+    {
+        $jobname = $this->requireNotEmptyParam('jobname');
+
+        $result = $this->backend->logexplorer_listdir($jobname);
+        $this->processUnnormalBackendResult($result);
+
+        $this->apiOk(array(
+            'logdirs' => $result['data'],
+        ), 'list log dir successfully');
+    }
+
+    /**
+     * List log file
+     */
+    public function logListFileAction()
+    {
+        $jobname = $this->requireNotEmptyParam('jobname');
+        $dirname = $this->requireNotEmptyParam('dirname');
+
+        $result = $this->backend->logexplorer_listfile($jobname, $dirname);
+        $this->processUnnormalBackendResult($result);
+
+        $this->apiOk(array(
+            'logfiles' => $result['data'],
+        ), 'list log file successfully');
+    }
+
+    /**
+     * Get log file content
+     */
+    public function logGetAction()
+    {
+        $jobname = $this->requireNotEmptyParam('jobname');
+        $dirname = $this->requireNotEmptyParam('dirname');
+        $filename = $this->requireNotEmptyParam('filename');
+
+        $result = $this->backend->logexplorer_get($jobname, $dirname, $filename);
+        $this->processUnnormalBackendResult($result);
+
+        $this->apiOk(array(
+            'log' => $result['data'],
+        ), 'get log file content successfully');
+    }
+
+    /**
+     * List server log dir
+     */
+    public function logServerListDirAction()
+    {
+        $result = $this->backend->logexplorer_serverlistdir();
+        $this->processUnnormalBackendResult($result);
+
+        $this->apiOk(array(
+            'logdirs' => $result['data'],
+        ), 'list server log dir successfully');
+    }
+
+    /**
+     * List server log file
+     */
+    public function logServerListFileAction()
+    {
+        $dirname = $this->requireNotEmptyParam('dirname');
+
+        $result = $this->backend->logexplorer_serverlistfile($dirname);
+        $this->processUnnormalBackendResult($result);
+
+        $this->apiOk(array(
+            'logfiles' => $result['data'],
+        ), 'list server log file successfully');
+    }
+
+    /**
+     * Get server log file content
+     */
+    public function logServerGetAction()
+    {
+        $dirname = $this->requireNotEmptyParam('dirname');
+        $filename = $this->requireNotEmptyParam('filename');
+
+        $result = $this->backend->logexplorer_serverget($dirname, $filename);
+        $this->processUnnormalBackendResult($result);
+
+        $this->apiOk(array(
+            'log' => $result['data'],
+        ), 'get server log file content successfully');
     }
 
 }
