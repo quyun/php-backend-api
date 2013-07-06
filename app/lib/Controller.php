@@ -107,6 +107,7 @@ Class Controller
             .'servername STRING, '
             .'serverip STRING, '
             .'serverport STRING, '
+            .'serverkey STRING, '
             .'username STRING, '
             .'password STRING)');
     }
@@ -203,7 +204,7 @@ Class Controller
     /**
      * Return error result to client
      */
-    public function apiErr($message='')
+    protected function apiErr($message='')
     {
         $message = $this->translateMessage($message);
         $dataFormat = $this->req->get('f');

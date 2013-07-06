@@ -30,6 +30,7 @@ Class ServerController extends Controller
             'serverip'      => '服务器IP地址',
             'serverport'    => '服务器端口',
             'serverid'      => '服务器ID',
+            'serverkey'     => '服务器监控密钥',
         ),
     );
 
@@ -51,6 +52,7 @@ Class ServerController extends Controller
         $servername = $this->requireNotEmptyParam('servername');
         $serverip = $this->requireNotEmptyParam('serverip');
         $serverport = $this->requireNotEmptyParam('serverport');
+        $serverkey = $this->req->get('serverkey');
         $username = $this->req->get('username');
         $password = $this->req->get('password');
 
@@ -64,6 +66,7 @@ Class ServerController extends Controller
         $stmt->bindValue(':servername', $servername, SQLITE3_TEXT);
         $stmt->bindValue(':serverip', $serverip, SQLITE3_TEXT);
         $stmt->bindValue(':serverport', $serverport, SQLITE3_TEXT);
+        $stmt->bindValue(':serverkey', $serverkey, SQLITE3_TEXT);
         $stmt->bindValue(':username', $username, SQLITE3_TEXT);
         $stmt->bindValue(':password', $password, SQLITE3_TEXT);
         $stmt->execute();
@@ -88,6 +91,7 @@ Class ServerController extends Controller
         $servername = $this->req->get('servername');
         $serverip = $this->req->get('serverip');
         $serverport = $this->req->get('serverport');
+        $serverkey = $this->req->get('serverkey');
         $username = $this->req->get('username');
         $password = $this->req->get('password');
 
@@ -104,6 +108,7 @@ Class ServerController extends Controller
             $this->requireNotEmptyParam('serverport');
             $statements[] = 'serverport=:serverport';
         }
+        if (!is_null($serverkey)) $statements[] = 'serverkey=:serverkey';
         if (!is_null($username)) $statements[] = 'username=:username';
         if (!is_null($password)) $statements[] = 'password=:password';
 
@@ -114,6 +119,7 @@ Class ServerController extends Controller
         if (!is_null($servername)) $stmt->bindValue(':servername', $servername, SQLITE3_TEXT);
         if (!is_null($serverip)) $stmt->bindValue(':serverip', $serverip, SQLITE3_TEXT);
         if (!is_null($serverport)) $stmt->bindValue(':serverport', $serverport, SQLITE3_TEXT);
+        if (!is_null($serverkey)) $stmt->bindValue(':serverkey', $serverkey, SQLITE3_TEXT);
         if (!is_null($username)) $stmt->bindValue(':username', $username, SQLITE3_TEXT);
         if (!is_null($password)) $stmt->bindValue(':password', $password, SQLITE3_TEXT);
         $stmt->bindValue(':serverid', $serverid, SQLITE3_INTEGER);
@@ -148,7 +154,7 @@ Class ServerController extends Controller
      */
     public function listAction()
     {
-        $result = $this->db->query('SELECT serverid, servername, serverip, serverport, username FROM servers');
+        $result = $this->db->query('SELECT serverid, servername, serverip, serverport, serverkey, username FROM servers');
 
         $servers = array();
         while ($server = $result->fetchArray(SQLITE3_ASSOC)) {
@@ -170,7 +176,7 @@ Class ServerController extends Controller
             $this->apiErr('server does not exist');
         }
 
-        $stmt = $this->db->prepare('SELECT serverid, servername, serverip, serverport, username FROM servers WHERE serverid=:serverid');
+        $stmt = $this->db->prepare('SELECT serverid, servername, serverip, serverport, serverkey, username FROM servers WHERE serverid=:serverid');
         $stmt->bindValue(':serverid', $serverid, SQLITE3_INTEGER);
         $result = $stmt->execute();
         $server = $result->fetchArray(SQLITE3_ASSOC);

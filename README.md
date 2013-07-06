@@ -25,7 +25,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 ```
 - c     模块名，如：user
 - a     操作名，如：login
-- i     json缩进开关，当设置为true时，将会对返回值进程格式化输出（方便调试查看）
+- i     json缩进开关，当设置为 1 时，将会对返回值进程格式化输出（方便调试查看）
 - f     数据格式，可选值：json|jsonp，默认为json
 - cb    jsonp回调函数名，仅当 f 为 jsonp 时有效
 - l     输出的消息语言，默认为英文，可选值为：zh_CN
@@ -33,9 +33,11 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例：
 
-    {API_GATEWAY}/?c=user&a=login&i=true&f=jsonp&cb=callback&username=admin&password=admin
+    {API_GATEWAY}/?c=user&a=login&i=1&f=jsonp&cb=callback&username=admin&password=admin
 
 #### 返回格式
+
+除外部监控接口外，其它所有接口的返回格式如下：
 
 成功返回：
 
@@ -109,6 +111,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
   - scheduleGet         获取调度配置
   - scheduleGetAll      获取所有调度配置信息
   - scheduleGetLog      获取调度执行历史
+
+- monitor               外部监控接口
 ```
 
 
@@ -131,7 +135,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=user&a=login&i=true&username=admin&password=admin
+    {API_GATEWAY}/?c=user&a=login&i=1&username=admin&password=admin
 
 
 示例返回：
@@ -159,7 +163,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=user&a=logout&i=true
+    {API_GATEWAY}/?c=user&a=logout&i=1
 
 
 示例返回：
@@ -188,7 +192,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=user&a=update&i=true&password=quyun
+    {API_GATEWAY}/?c=user&a=update&i=1&password=quyun
 
 示例返回：
 
@@ -215,6 +219,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
     servername  (必须)服务器名称
     serverip    (必须)服务器IP地址
     serverport  (必须)服务器端口
+    serverkey   (可选)服务器监控密钥
     username    (可选)服务器用户名
     password    (可选)服务器密码
 
@@ -224,7 +229,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=server&a=add&i=true&servername=localhost&serverip=127.0.0.1&serverport=13123
+    {API_GATEWAY}/?c=server&a=add&i=1&servername=localhost&serverip=127.0.0.1&serverport=13123
 
 
 示例返回：
@@ -248,6 +253,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
     servername  (可选)服务器名称
     serverip    (可选)服务器IP地址
     serverport  (可选)服务器端口
+    serverkey   (可选)服务器监控密钥
     username    (可选)服务器用户名
     password    (可选)服务器密码
 
@@ -257,7 +263,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=server&a=update&i=true&serverid=1&serverport=13123
+    {API_GATEWAY}/?c=server&a=update&i=1&serverid=1&serverport=13123
 
 
 示例返回：
@@ -285,7 +291,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=server&a=delete&i=true&serverid=1
+    {API_GATEWAY}/?c=server&a=delete&i=1&serverid=1
 
 
 示例返回：
@@ -313,7 +319,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=server&a=list&i=true
+    {API_GATEWAY}/?c=server&a=list&i=1
 
 
 示例返回：
@@ -329,6 +335,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
         "servername":"localhost",
         "serverip":"127.0.0.1",
         "serverport":13123,
+        "serverkey":null,
         "username":null
       }
     ]
@@ -349,7 +356,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=server&a=get&i=true&serverid=1
+    {API_GATEWAY}/?c=server&a=get&i=1&serverid=1
 
 
 示例返回：
@@ -364,6 +371,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
       "servername":"localhost",
       "serverip":"127.0.0.1",
       "serverport":13123,
+      "serverkey":null,
       "username":null
     }
   }
@@ -395,7 +403,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=add&i=true&serverid=1&jobname=test&command=/var/www/test.php
+    {API_GATEWAY}/?c=backend&a=add&i=1&serverid=1&jobname=test&command=/var/www/test.php
 
 
 示例返回：
@@ -428,7 +436,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=update&i=true&serverid=1&jobname=test&autostart=0
+    {API_GATEWAY}/?c=backend&a=update&i=1&serverid=1&jobname=test&autostart=0
 
 
 示例返回：
@@ -455,7 +463,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=delete&i=true&serverid=1&jobname=test
+    {API_GATEWAY}/?c=backend&a=delete&i=1&serverid=1&jobname=test
 
 
 示例返回：
@@ -482,7 +490,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=get&i=true&serverid=1&jobname=test
+    {API_GATEWAY}/?c=backend&a=get&i=1&serverid=1&jobname=test
 
 
 示例返回：
@@ -517,7 +525,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=getAll&i=true&serverid=1
+    {API_GATEWAY}/?c=backend&a=getAll&i=1&serverid=1
 
 
 示例返回：
@@ -561,7 +569,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=start&i=true&serverid=1&jobname=test
+    {API_GATEWAY}/?c=backend&a=start&i=1&serverid=1&jobname=test
 
 
 示例返回：
@@ -588,7 +596,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=stop&i=true&serverid=1&jobname=test
+    {API_GATEWAY}/?c=backend&a=stop&i=1&serverid=1&jobname=test
 
 
 示例返回：
@@ -615,7 +623,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=restart&i=true&serverid=1&jobname=test
+    {API_GATEWAY}/?c=backend&a=restart&i=1&serverid=1&jobname=test
 
 
 示例返回：
@@ -642,7 +650,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=status&i=true&serverid=1&jobname=test
+    {API_GATEWAY}/?c=backend&a=status&i=1&serverid=1&jobname=test
 
 
 示例返回：
@@ -670,7 +678,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=statusAll&i=true&serverid=1
+    {API_GATEWAY}/?c=backend&a=statusAll&i=1&serverid=1
 
 
 示例返回：
@@ -701,7 +709,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=read&i=true&serverid=1&jobname=test
+    {API_GATEWAY}/?c=backend&a=read&i=1&serverid=1&jobname=test
 
 
 示例返回：
@@ -730,7 +738,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=mem&i=true&serverid=1&jobname=test
+    {API_GATEWAY}/?c=backend&a=mem&i=1&serverid=1&jobname=test
 
 
 示例返回：
@@ -758,7 +766,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=memAll&i=true&serverid=1
+    {API_GATEWAY}/?c=backend&a=memAll&i=1&serverid=1
 
 
 示例返回：
@@ -786,7 +794,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=serverMem&i=true&serverid=1
+    {API_GATEWAY}/?c=backend&a=serverMem&i=1&serverid=1
 
 
 示例返回：
@@ -814,7 +822,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=serverRead&i=true&serverid=1
+    {API_GATEWAY}/?c=backend&a=serverRead&i=1&serverid=1
 
 
 示例返回：
@@ -842,7 +850,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=authGetEnable&i=true&serverid=1
+    {API_GATEWAY}/?c=backend&a=authGetEnable&i=1&serverid=1
 
 
 示例返回：
@@ -871,7 +879,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=authSetEnable&i=true&serverid=1&enable=1
+    {API_GATEWAY}/?c=backend&a=authSetEnable&i=1&serverid=1&enable=1
 
 
 示例返回：
@@ -900,7 +908,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=authAdd&i=true&serverid=1&username=beadmin&password=quyun&privileges=*
+    {API_GATEWAY}/?c=backend&a=authAdd&i=1&serverid=1&username=beadmin&password=quyun&privileges=*
 
 
 示例返回：
@@ -929,7 +937,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=authUpdate&i=true&serverid=1&username=beadmin&password=quyun
+    {API_GATEWAY}/?c=backend&a=authUpdate&i=1&serverid=1&username=beadmin&password=quyun
 
 
 示例返回：
@@ -956,7 +964,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=authDelete&i=true&serverid=1&username=beadmin
+    {API_GATEWAY}/?c=backend&a=authDelete&i=1&serverid=1&username=beadmin
 
 
 示例返回：
@@ -983,7 +991,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=authGet&i=true&serverid=1&username=beadmin
+    {API_GATEWAY}/?c=backend&a=authGet&i=1&serverid=1&username=beadmin
 
 
 示例返回：
@@ -1014,7 +1022,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=authGet&i=true&serverid=1
+    {API_GATEWAY}/?c=backend&a=authGet&i=1&serverid=1
 
 
 示例返回：
@@ -1048,7 +1056,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=logListDir&i=true&serverid=1&jobname=test
+    {API_GATEWAY}/?c=backend&a=logListDir&i=1&serverid=1&jobname=test
 
 
 示例返回：
@@ -1083,7 +1091,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=logListFile&i=true&serverid=1&jobname=test&dirname=20130705
+    {API_GATEWAY}/?c=backend&a=logListFile&i=1&serverid=1&jobname=test&dirname=20130705
 
 
 示例返回：
@@ -1126,7 +1134,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=logGet&i=true&serverid=1&jobname=test&dirname=20130705&filename=2013070510.log
+    {API_GATEWAY}/?c=backend&a=logGet&i=1&serverid=1&jobname=test&dirname=20130705&filename=2013070510.log
 
 
 示例返回：
@@ -1154,7 +1162,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=logServerListDir&i=true&serverid=1
+    {API_GATEWAY}/?c=backend&a=logServerListDir&i=1&serverid=1
 
 
 示例返回：
@@ -1189,7 +1197,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=logServerListFile&i=true&serverid=1&jobname=test&dirname=20130705
+    {API_GATEWAY}/?c=backend&a=logServerListFile&i=1&serverid=1&jobname=test&dirname=20130705
 
 
 示例返回：
@@ -1231,7 +1239,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=logServerGet&i=true&serverid=1&jobname=test&dirname=20130705&filename=2013070510.log
+    {API_GATEWAY}/?c=backend&a=logServerGet&i=1&serverid=1&jobname=test&dirname=20130705&filename=2013070510.log
 
 
 示例返回：
@@ -1252,7 +1260,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 请求参数：
 
     serverid    (必须)服务器ID
-    jobname     (必须)服务器ID
+    jobname     (必须)进程名称
     enable      (必须)是否启用该配置，可选值：0|1
     condition   (必须)调度条件，条件字段请参考附录
 
@@ -1262,7 +1270,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=scheduleAdd&i=true&serverid=1&jobname=test&enable=1&condition[U]=300
+    {API_GATEWAY}/?c=backend&a=scheduleAdd&i=1&serverid=1&jobname=test&enable=1&condition[U]=300
 
 
 示例返回：
@@ -1283,7 +1291,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 请求参数：
 
     serverid    (必须)服务器ID
-    jobname     (必须)服务器ID
+    jobname     (必须)进程名称
     scheduleid  (必须)调度配置ID
     enable      (可选)是否启用该配置，可选值：0|1
     condition   (可选)调度条件，条件字段请参考附录
@@ -1294,7 +1302,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=scheduleUpdate&i=true&serverid=1&jobname=test&scheduleid=4fe1e4a9-a6e9-4eed-8809-397fc1bfd042&enable=0
+    {API_GATEWAY}/?c=backend&a=scheduleUpdate&i=1&serverid=1&jobname=test&scheduleid=4fe1e4a9-a6e9-4eed-8809-397fc1bfd042&enable=0
 
 
 示例返回：
@@ -1313,7 +1321,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 请求参数：
 
     serverid    (必须)服务器ID
-    jobname     (必须)服务器ID
+    jobname     (必须)进程名称
     scheduleid  (必须)调度配置ID
 
 返回数据：
@@ -1322,7 +1330,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=scheduleDelete&i=true&serverid=1&jobname=test&scheduleid=4fe1e4a9-a6e9-4eed-8809-397fc1bfd042
+    {API_GATEWAY}/?c=backend&a=scheduleDelete&i=1&serverid=1&jobname=test&scheduleid=4fe1e4a9-a6e9-4eed-8809-397fc1bfd042
 
 
 示例返回：
@@ -1341,7 +1349,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 请求参数：
 
     serverid    (必须)服务器ID
-    jobname     (必须)服务器ID
+    jobname     (必须)进程名称
     scheduleid  (必须)调度配置ID
 
 返回数据：
@@ -1350,7 +1358,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=scheduleGet&i=true&serverid=1&jobname=test&scheduleid=4fe1e4a9-a6e9-4eed-8809-397fc1bfd042
+    {API_GATEWAY}/?c=backend&a=scheduleGet&i=1&serverid=1&jobname=test&scheduleid=4fe1e4a9-a6e9-4eed-8809-397fc1bfd042
 
 
 示例返回：
@@ -1385,7 +1393,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=scheduleGetAll&i=true&serverid=1
+    {API_GATEWAY}/?c=backend&a=scheduleGetAll&i=1&serverid=1
 
 
 示例返回：
@@ -1415,7 +1423,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 请求参数：
 
     serverid    (必须)服务器ID
-    jobname     (必须)服务器ID
+    jobname     (必须)进程名称
     scheduleid  (必须)调度配置ID
 
 返回数据：
@@ -1424,7 +1432,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
 示例请求：
 
-    {API_GATEWAY}/?c=backend&a=scheduleGetLog&i=true&serverid=1&jobname=test&scheduleid=4fe1e4a9-a6e9-4eed-8809-397fc1bfd042
+    {API_GATEWAY}/?c=backend&a=scheduleGetLog&i=1&serverid=1&jobname=test&scheduleid=4fe1e4a9-a6e9-4eed-8809-397fc1bfd042
 
 
 示例返回：
@@ -1449,6 +1457,26 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
   }
 }
 ```
+
+
+#### monitor - 外部监控接口
+
+
+请求参数：
+
+    serverid    (必须)服务器ID
+    jobnames    (必须)进程名称，多个进程以逗号分隔
+
+示例请求：
+
+    {API_GATEWAY}/?c=monitor&serverid=1&jobnames=test1,test2,test3
+
+以上示例表示同时监控 ID 为 1 的服务器上 test1,test2,test3 三个进程的状态：
+* 如果三个进程状态均为 UP，则 HTTP 返回码为 200
+* 如果有一个进程状态不为 DOWN，则 HTTP 返回码为 500
+
+监控页面中同时会显示各个被监控的进程的状态列表。
+
 
 
 ## 附录
