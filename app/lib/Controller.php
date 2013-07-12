@@ -132,7 +132,7 @@ Class Controller
         $be = new Backend();
         $be->init($server['serverip'], $server['serverport']);
         if ($server['username'] && $server['password']) {
-            $be->init_auth($server['username'], $server['password']);
+            $be->set_auth($server['username'], $server['password']);
         }
         $this->_backends[$serverid] = $be;
 
