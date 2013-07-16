@@ -115,9 +115,9 @@ Class BackendController extends Controller
         $guard = $this->req->get('guard');
 
         $setting = array();
-        if (!is_null($params)) {
+        if (!is_null($command)) {
             $this->requireNotEmptyParam('command');
-            $setting['params'] = $params;
+            $setting['command'] = $command;
         }
         if (!is_null($comment)) $setting['comment'] = $comment;
         if (!is_null($params)) $setting['params'] = $params;
