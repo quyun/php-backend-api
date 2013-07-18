@@ -901,6 +901,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
     username    (必须)用户名
     password    (必须)密码
     privileges  (必须)权限，用逗号分隔，*表示所有权限，权限列表请参考附录
+    comment     (可选)用户备注
 
 返回数据：
 
@@ -930,6 +931,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
     username    (必须)用户名
     password    (可选)密码
     privileges  (可选)权限，用逗号分隔，*表示所有权限，权限列表请参考附录
+    comment     (可选)用户备注
 
 返回数据：
 

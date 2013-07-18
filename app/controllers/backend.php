@@ -344,8 +344,12 @@ Class BackendController extends Controller
         $username = $this->requireNotEmptyParam('username');
         $password = $this->requireNotEmptyParam('password');
         $privileges = $this->requireNotEmptyParam('privileges');
+        $comment = $this->req->get('comment');
 
-        $result = $this->backend->auth_add($username, $password, $privileges);
+        $setting = array();
+        if (!is_null($comment)) $setting = array('comment'=>$comment);
+
+        $result = $this->backend->auth_add($username, $password, $privileges, $setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(null, 'user add successfully');
@@ -359,6 +363,7 @@ Class BackendController extends Controller
         $username = $this->requireNotEmptyParam('username');
         $password = $this->req->get('password');
         $privileges = $this->req->get('privileges');
+        $comment = $this->req->get('comment');
 
         $setting = array();
         if (!is_null($password)) {
@@ -368,6 +373,9 @@ Class BackendController extends Controller
         if (!is_null($privileges)) {
             $this->requireNotEmptyParam('privileges');
             $setting['privileges'] = $privileges;
+        }
+        if (!is_null($comment)) {
+            $setting = array('comment'=>$comment);
         }
 
         if (!$setting) $this->apiErr('nothing to update');
