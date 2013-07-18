@@ -16,6 +16,7 @@ Class UserController extends Controller
             'login successfully'                    => '登录成功',
             'logout successfully'                   => '注销成功',
             'update successfully'                   => '更新成功',
+            'get user info successfully'            => '获取用户信息成功',
         ),
     );
 
@@ -75,6 +76,18 @@ Class UserController extends Controller
     }
 
     /**
+     * Get current user info
+     */
+    public function getAction()
+    {
+        $this->auth();
+
+        $this->apiOk(array(
+            'username' => $_SESSION['username'],
+        ), 'get user info successfully');
+    }
+
+    /**
      * Update
      */
     public function updateAction()
@@ -100,7 +113,7 @@ Class UserController extends Controller
         $sql = 'UPDATE users SET '.implode(',', $statements).' WHERE username=:origUsername';
         $stmt = $this->db->prepare($sql);
         if (!is_null($username)) $stmt->bindValue(':username', $username, SQLITE3_TEXT);
-        if (!is_null($password)) $stmt->bindValue(':password', $password, SQLITE3_TEXT);
+        if (!is_null($password)) $stmt->bindValue(':password', md5($password), SQLITE3_TEXT);
         $stmt->bindValue(':origUsername', $origUsername, SQLITE3_TEXT);
         $stmt->execute();
 

@@ -67,6 +67,7 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 - user                  用户类接口
   - login               登录
   - logout              注销
+  - get                 获取当前登录的用户信息
   - update              更改用户名/密码
 
 - server                服务器类接口
@@ -172,6 +173,34 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 {
   "code":0,
   "message":"logout successfully",
+  "data":{
+    "username":"admin"
+  }
+}
+```
+
+
+##### get - 获取当前登录的用户信息
+
+请求参数：
+
+    无
+
+返回数据：
+
+    username    用户名
+
+示例请求：
+
+    {API_GATEWAY}/?c=user&a=get&i=1
+
+
+示例返回：
+
+```
+{
+  "code":0,
+  "message":"get user info successfully",
   "data":{
     "username":"admin"
   }
