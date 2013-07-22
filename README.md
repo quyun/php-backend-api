@@ -425,6 +425,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
     writelog    (可选)是否将进程输出写入日志，取值：0|1，默认为0
     autostart   (可选)是否随服务器启动，取值：0|1，默认为0
     guard       (可选)是否监控该进程，非人为退出后自动启动，取值：0|1，默认为0
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -458,6 +460,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
     writelog    (可选)是否将进程输出写入日志，取值：0|1，默认为0
     autostart   (可选)是否随服务器启动，取值：0|1，默认为0
     guard       (可选)是否监控该进程，非人为退出后自动启动，取值：0|1，默认为0
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -485,6 +489,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
     serverid    (必须)服务器ID
     jobname     (必须)进程名称
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -512,6 +518,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
     serverid    (必须)服务器ID
     jobname     (必须)进程名称
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -547,6 +555,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 请求参数：
 
     serverid    (必须)服务器ID
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -591,6 +601,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
     serverid    (必须)服务器ID
     jobname     (必须)进程名称
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -618,6 +630,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
     serverid    (必须)服务器ID
     jobname     (必须)进程名称
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -645,6 +659,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
     serverid    (必须)服务器ID
     jobname     (必须)进程名称
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -672,6 +688,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
     serverid    (必须)服务器ID
     jobname     (必须)进程名称
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -700,6 +718,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 请求参数：
 
     serverid    (必须)服务器ID
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -731,6 +751,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
     serverid    (必须)服务器ID
     jobname     (必须)进程名称
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -760,6 +782,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
     serverid    (必须)服务器ID
     jobname     (必须)进程名称
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -788,6 +812,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 请求参数：
 
     serverid    (必须)服务器ID
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -816,6 +842,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 请求参数：
 
     serverid    (必须)服务器ID
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -844,6 +872,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 请求参数：
 
     serverid    (必须)服务器ID
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -872,6 +902,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 请求参数：
 
     serverid    (必须)服务器ID
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -901,6 +933,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
     serverid    (必须)服务器ID
     enable      (必须)是否启用授权管理，可选值：0|1
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -931,6 +965,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
     password    (必须)密码
     privileges  (必须)权限，用逗号分隔，*表示所有权限，权限列表请参考附录
     comment     (可选)用户备注
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -961,6 +997,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
     password    (可选)密码
     privileges  (可选)权限，用逗号分隔，*表示所有权限，权限列表请参考附录
     comment     (可选)用户备注
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -988,6 +1026,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
     serverid    (必须)服务器ID
     username    (必须)用户名
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -1015,6 +1055,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
     serverid    (必须)服务器ID
     username    (必须)用户名
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -1046,6 +1088,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 请求参数：
 
     serverid    (必须)服务器ID
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -1080,6 +1124,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
     serverid    (必须)服务器ID
     jobname     (必须)进程名称
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -1115,6 +1161,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
     serverid    (必须)服务器ID
     jobname     (必须)进程名称
     dirname     (必须)日志目录名称
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -1158,6 +1206,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
     jobname     (必须)进程名称
     dirname     (必须)日志目录名称
     filename    (必须)日志文件名称
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -1186,6 +1236,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 请求参数：
 
     serverid    (必须)服务器ID
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -1221,6 +1273,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
     serverid    (必须)服务器ID
     dirname     (必须)日志目录名称
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -1263,6 +1317,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
     serverid    (必须)服务器ID
     dirname     (必须)日志目录名称
     filename    (必须)日志文件名称
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -1294,6 +1350,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
     jobname     (必须)进程名称
     enable      (必须)是否启用该配置，可选值：0|1
     condition   (必须)调度条件，条件字段请参考附录
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -1326,6 +1384,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
     scheduleid  (必须)调度配置ID
     enable      (可选)是否启用该配置，可选值：0|1
     condition   (可选)调度条件，条件字段请参考附录
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -1354,6 +1414,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
     serverid    (必须)服务器ID
     jobname     (必须)进程名称
     scheduleid  (必须)调度配置ID
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -1382,6 +1444,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
     serverid    (必须)服务器ID
     jobname     (必须)进程名称
     scheduleid  (必须)调度配置ID
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -1417,6 +1481,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 请求参数：
 
     serverid    (必须)服务器ID
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -1456,6 +1522,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
     serverid    (必须)服务器ID
     jobname     (必须)进程名称
     scheduleid  (必须)调度配置ID
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 返回数据：
 
@@ -1497,6 +1565,8 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
 
     serverid    (必须)服务器ID
     jobnames    (必须)进程名称，多个进程以逗号分隔
+    auth[username]    (可选)服务器用户名
+    auth[password]    (可选)服务器密码
 
 示例请求：
 

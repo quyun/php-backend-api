@@ -73,6 +73,22 @@ Class BackendController extends Controller
     {
         parent::__construct($app);
         $this->auth();
+
+        $this->parseServerAuthParams();
+    }
+
+    /**
+     * Parser username and password to setting
+     */
+    private function parseServerAuthParams()
+    {
+        $authinfo = $this->req->get('auth');
+        $this->setting = array(
+            'auth' => array(
+                'username' => isset($authinfo['username']) ? $authinfo['username'] : '',
+                'password' => isset($authinfo['password']) ? $authinfo['password'] : '',
+            ),
+        );
     }
 
     /**
@@ -88,14 +104,13 @@ Class BackendController extends Controller
         $autostart = $this->req->get('autostart');
         $guard = $this->req->get('guard');
 
-        $setting = array();
-        $setting['comment'] = is_null($comment) ? '' : $comment;
-        $setting['params'] = is_null($params) ? '' : $params;
-        $setting['writelog'] = $writelog ? true : false;
-        $setting['autostart'] = $autostart ? true : false;
-        $setting['guard'] = $guard ? true : false;
+        $this->setting['comment'] = is_null($comment) ? '' : $comment;
+        $this->setting['params'] = is_null($params) ? '' : $params;
+        $this->setting['writelog'] = $writelog ? true : false;
+        $this->setting['autostart'] = $autostart ? true : false;
+        $this->setting['guard'] = $guard ? true : false;
 
-        $result = $this->backend->add($jobname, $command, $setting);
+        $result = $this->backend->add($jobname, $command, $this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(null, 'process add successfully');
@@ -114,20 +129,19 @@ Class BackendController extends Controller
         $autostart = $this->req->get('autostart');
         $guard = $this->req->get('guard');
 
-        $setting = array();
         if (!is_null($command)) {
             $this->requireNotEmptyParam('command');
-            $setting['command'] = $command;
+            $this->setting['command'] = $command;
         }
-        if (!is_null($comment)) $setting['comment'] = $comment;
-        if (!is_null($params)) $setting['params'] = $params;
-        if (!is_null($writelog)) $setting['writelog'] = $writelog ? true : false;
-        if (!is_null($autostart)) $setting['autostart'] = $autostart ? true : false;
-        if (!is_null($guard)) $setting['guard'] = $guard ? true : false;
+        if (!is_null($comment)) $this->setting['comment'] = $comment;
+        if (!is_null($params)) $this->setting['params'] = $params;
+        if (!is_null($writelog)) $this->setting['writelog'] = $writelog ? true : false;
+        if (!is_null($autostart)) $this->setting['autostart'] = $autostart ? true : false;
+        if (!is_null($guard)) $this->setting['guard'] = $guard ? true : false;
 
-        if (!$setting) $this->apiErr('nothing to update');
+        if (!$this->setting) $this->apiErr('nothing to update');
 
-        $result = $this->backend->update($jobname, $setting);
+        $result = $this->backend->update($jobname, $this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(null, 'process update successfully');
@@ -140,7 +154,7 @@ Class BackendController extends Controller
     {
         $jobname = $this->requireNotEmptyParam('jobname');
 
-        $result = $this->backend->delete($jobname);
+        $result = $this->backend->delete($jobname, $this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(null, 'process delete successfully');
@@ -153,7 +167,7 @@ Class BackendController extends Controller
     {
         $jobname = $this->requireNotEmptyParam('jobname');
 
-        $result = $this->backend->start($jobname);
+        $result = $this->backend->start($jobname, $this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(null, 'process start successfully');
@@ -166,7 +180,7 @@ Class BackendController extends Controller
     {
         $jobname = $this->requireNotEmptyParam('jobname');
 
-        $result = $this->backend->stop($jobname);
+        $result = $this->backend->stop($jobname, $this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(null, 'process stop successfully');
@@ -179,7 +193,7 @@ Class BackendController extends Controller
     {
         $jobname = $this->requireNotEmptyParam('jobname');
 
-        $result = $this->backend->restart($jobname);
+        $result = $this->backend->restart($jobname, $this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(null, 'process restart successfully');
@@ -192,7 +206,7 @@ Class BackendController extends Controller
     {
         $jobname = $this->requireNotEmptyParam('jobname');
 
-        $result = $this->backend->status($jobname);
+        $result = $this->backend->status($jobname, $this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(array(
@@ -205,7 +219,7 @@ Class BackendController extends Controller
      */
     public function statusAllAction()
     {
-        $result = $this->backend->statusall();
+        $result = $this->backend->statusall($this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(array(
@@ -220,7 +234,7 @@ Class BackendController extends Controller
     {
         $jobname = $this->requireNotEmptyParam('jobname');
 
-        $result = $this->backend->read($jobname);
+        $result = $this->backend->read($jobname, $this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(array(
@@ -235,7 +249,7 @@ Class BackendController extends Controller
     {
         $jobname = $this->requireNotEmptyParam('jobname');
 
-        $result = $this->backend->mem($jobname);
+        $result = $this->backend->mem($jobname, $this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(array(
@@ -248,7 +262,7 @@ Class BackendController extends Controller
      */
     public function memAllAction()
     {
-        $result = $this->backend->memall();
+        $result = $this->backend->memall($this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(array(
@@ -263,7 +277,7 @@ Class BackendController extends Controller
     {
         $jobname = $this->requireNotEmptyParam('jobname');
 
-        $result = $this->backend->get($jobname);
+        $result = $this->backend->get($jobname, $this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(array(
@@ -276,7 +290,7 @@ Class BackendController extends Controller
      */
     public function getAllAction()
     {
-        $result = $this->backend->getall();
+        $result = $this->backend->getall($this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(array(
@@ -289,7 +303,7 @@ Class BackendController extends Controller
      */
     public function serverMemAction()
     {
-        $result = $this->backend->servermem();
+        $result = $this->backend->servermem($this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(array(
@@ -302,7 +316,7 @@ Class BackendController extends Controller
      */
     public function serverReadAction()
     {
-        $result = $this->backend->serverread();
+        $result = $this->backend->serverread($this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(array(
@@ -315,7 +329,7 @@ Class BackendController extends Controller
      */
     public function authGetEnableAction()
     {
-        $result = $this->backend->auth_getenable();
+        $result = $this->backend->auth_getenable($this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(array(
@@ -330,7 +344,7 @@ Class BackendController extends Controller
     {
         $enable = $this->requireNotEmptyParam('enable') ? true : false;
 
-        $result = $this->backend->auth_setenable($enable);
+        $result = $this->backend->auth_setenable($enable, $this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(null, 'set auth enable status successfully');
@@ -346,10 +360,9 @@ Class BackendController extends Controller
         $privileges = $this->requireNotEmptyParam('privileges');
         $comment = $this->req->get('comment');
 
-        $setting = array();
-        if (!is_null($comment)) $setting = array('comment'=>$comment);
+        if (!is_null($comment)) $this->setting['comment'] = $comment;
 
-        $result = $this->backend->auth_add($username, $password, $privileges, $setting);
+        $result = $this->backend->auth_add($username, $password, $privileges, $this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(null, 'user add successfully');
@@ -365,22 +378,21 @@ Class BackendController extends Controller
         $privileges = $this->req->get('privileges');
         $comment = $this->req->get('comment');
 
-        $setting = array();
         if (!is_null($password)) {
             $this->requireNotEmptyParam('password');
-            $setting['password'] = $password;
+            $this->setting['password'] = $password;
         }
         if (!is_null($privileges)) {
             $this->requireNotEmptyParam('privileges');
-            $setting['privileges'] = $privileges;
+            $this->setting['privileges'] = $privileges;
         }
         if (!is_null($comment)) {
-            $setting = array('comment'=>$comment);
+            $this->setting['comment'] = $comment;
         }
 
-        if (!$setting) $this->apiErr('nothing to update');
+        if (!$this->setting) $this->apiErr('nothing to update');
 
-        $result = $this->backend->auth_update($username, $setting);
+        $result = $this->backend->auth_update($username, $this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(null, 'user update successfully');
@@ -393,7 +405,7 @@ Class BackendController extends Controller
     {
         $username = $this->requireNotEmptyParam('username');
 
-        $result = $this->backend->auth_delete($username);
+        $result = $this->backend->auth_delete($username, $this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(null, 'user delete successfully');
@@ -406,7 +418,7 @@ Class BackendController extends Controller
     {
         $username = $this->requireNotEmptyParam('username');
 
-        $result = $this->backend->auth_get($username);
+        $result = $this->backend->auth_get($username, $this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(array(
@@ -419,7 +431,7 @@ Class BackendController extends Controller
      */
     public function authGetAllAction()
     {
-        $result = $this->backend->auth_getall();
+        $result = $this->backend->auth_getall($this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(array(
@@ -434,7 +446,7 @@ Class BackendController extends Controller
     {
         $jobname = $this->requireNotEmptyParam('jobname');
 
-        $result = $this->backend->logexplorer_listdir($jobname);
+        $result = $this->backend->logexplorer_listdir($jobname, $this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(array(
@@ -450,7 +462,7 @@ Class BackendController extends Controller
         $jobname = $this->requireNotEmptyParam('jobname');
         $dirname = $this->requireNotEmptyParam('dirname');
 
-        $result = $this->backend->logexplorer_listfile($jobname, $dirname);
+        $result = $this->backend->logexplorer_listfile($jobname, $dirname, $this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(array(
@@ -467,7 +479,7 @@ Class BackendController extends Controller
         $dirname = $this->requireNotEmptyParam('dirname');
         $filename = $this->requireNotEmptyParam('filename');
 
-        $result = $this->backend->logexplorer_get($jobname, $dirname, $filename);
+        $result = $this->backend->logexplorer_get($jobname, $dirname, $filename, $this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(array(
@@ -480,7 +492,7 @@ Class BackendController extends Controller
      */
     public function logServerListDirAction()
     {
-        $result = $this->backend->logexplorer_serverlistdir();
+        $result = $this->backend->logexplorer_serverlistdir($this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(array(
@@ -495,7 +507,7 @@ Class BackendController extends Controller
     {
         $dirname = $this->requireNotEmptyParam('dirname');
 
-        $result = $this->backend->logexplorer_serverlistfile($dirname);
+        $result = $this->backend->logexplorer_serverlistfile($dirname, $this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(array(
@@ -511,7 +523,7 @@ Class BackendController extends Controller
         $dirname = $this->requireNotEmptyParam('dirname');
         $filename = $this->requireNotEmptyParam('filename');
 
-        $result = $this->backend->logexplorer_serverget($dirname, $filename);
+        $result = $this->backend->logexplorer_serverget($dirname, $filename, $this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(array(
@@ -528,12 +540,10 @@ Class BackendController extends Controller
         $enable = $this->requireNotEmptyParam('enable');
         $condition = $this->requireNotEmptyParam('condition');
 
-        $setting = array(
-            'enable' => $enable,
-            'condition' => $condition,
-        );
+        $this->setting['enable'] = $enable;
+        $this->setting['condition'] = $condition;
 
-        $result = $this->backend->scheduler_add($jobname, $setting);
+        $result = $this->backend->scheduler_add($jobname, $this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(array(
@@ -551,19 +561,18 @@ Class BackendController extends Controller
         $enable = $this->req->get('enable');
         $condition = $this->req->get('condition');
 
-        $setting = array();
         if (!is_null($enable)) {
             $this->requireNotEmptyParam('enable');
-            $setting['enable'] = $enable;
+            $this->setting['enable'] = $enable;
         }
         if (!is_null($condition)) {
             $this->requireNotEmptyParam('condition');
-            $setting['condition'] = $condition;
+            $this->setting['condition'] = $condition;
         }
 
-        if (!$setting) $this->apiErr('nothing to update');
+        if (!$this->setting) $this->apiErr('nothing to update');
 
-        $result = $this->backend->scheduler_update($jobname, $scheduleid, $setting);
+        $result = $this->backend->scheduler_update($jobname, $scheduleid, $this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(null, 'schedule update successfully');
@@ -577,7 +586,7 @@ Class BackendController extends Controller
         $jobname = $this->requireNotEmptyParam('jobname');
         $scheduleid = $this->requireNotEmptyParam('scheduleid');
 
-        $result = $this->backend->scheduler_delete($jobname, $scheduleid);
+        $result = $this->backend->scheduler_delete($jobname, $scheduleid, $this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(null, 'schedule delete successfully');
@@ -591,7 +600,7 @@ Class BackendController extends Controller
         $jobname = $this->requireNotEmptyParam('jobname');
         $scheduleid = $this->requireNotEmptyParam('scheduleid');
 
-        $result = $this->backend->scheduler_get($jobname, $scheduleid);
+        $result = $this->backend->scheduler_get($jobname, $scheduleid, $this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(array(
@@ -604,7 +613,7 @@ Class BackendController extends Controller
      */
     public function scheduleGetAllAction()
     {
-        $result = $this->backend->scheduler_getall();
+        $result = $this->backend->scheduler_getall($this->setting);
         $this->processUnnormalBackendResult($result);
 
         $this->apiOk(array(
@@ -620,7 +629,7 @@ Class BackendController extends Controller
         $jobname = $this->requireNotEmptyParam('jobname');
         $scheduleid = $this->requireNotEmptyParam('scheduleid');
 
-        $result = $this->backend->scheduler_getlog($jobname, $scheduleid);
+        $result = $this->backend->scheduler_getlog($jobname, $scheduleid, $this->setting);
         $this->processUnnormalBackendResult($result);
 
         $log = $result['data'];
