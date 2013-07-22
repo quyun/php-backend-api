@@ -21,14 +21,6 @@ Class MonitorController extends Controller
             }   
         }
 
-        $authinfo = $this->req->get('auth');
-        $setting = array(
-            'auth' => array(
-                'username' => isset($authinfo['username']) ? $authinfo['username'] : '',
-                'password' => isset($authinfo['password']) ? $authinfo['password'] : '',
-            ),
-        );
-
         $jobnames = $this->requireNotEmptyParam('jobnames');
 
         $jobnames = array_unique(explode(',', $jobnames));
@@ -36,7 +28,7 @@ Class MonitorController extends Controller
         $errorExists = false;
 
         foreach ($jobnames as $jobname) {
-            $result = $this->backend->status($jobname, $setting);
+            $result = $this->backend->status($jobname);
             if (!$result) {
                 $this->apiErr('unable to connect to backend server');
             }
