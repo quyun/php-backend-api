@@ -1400,11 +1400,9 @@ php-backend-api 部署的 URL 地址，下文中以 {API_GATEWAY} 代替。
   "message":"get schedule info successfully",
   "data":{
     "schedule":{
-      "4fe1e4a9-a6e9-4eed-8809-397fc1bfd042":{
-        "enable":true,
-        "condition":{
-          "U":300
-        }
+      "enable":true,
+      "condition":{
+        "U":300
       }
     }
   }
